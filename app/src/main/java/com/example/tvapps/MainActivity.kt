@@ -1,47 +1,38 @@
 package com.example.tvapps
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.tvapps.ui.theme.TVAppsTheme
+import androidx.lifecycle.lifecycleScope
+import com.example.tvapps.data.remote.NetworkModule
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            TVAppsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+
+        lifecycleScope.launch {
+            testApi()
         }
+
+        setContent {
+            // Temporary UI
+        }
+        Log.d("TEST_API", "onCreate jalan")
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private suspend fun testApi() {
+        Log.d("TEST_API", "testApi mulai")
+        try {
+            val shows = NetworkModule.api.getShows()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TVAppsTheme {
-        Greeting("Android")
+            Log.d("TEST_API", "Total shows: ${shows.size}")
+            shows.take(5).forEach {
+                Log.d("TEST_API", it.name)
+            }
+        } catch (e: Exception) {
+            Log.e("TEST_API", "Error: ${e.message}", e)
+        }
     }
 }
