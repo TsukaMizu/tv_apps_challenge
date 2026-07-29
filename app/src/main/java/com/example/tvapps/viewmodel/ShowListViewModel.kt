@@ -11,27 +11,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ShowListViewModel(
-    private val repository: TvRepository
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<Resource<List<ShowDto>>>(Resource.Loading)
-    val uiState: StateFlow<Resource<List<ShowDto>>> = _uiState.asStateFlow()
-
-    init {
-        fetchShows()
+    private val repository: TvRepository) : ViewModel() {
+    private val _showState = MutableStateFlow<Resource<List<ShowDto>>> (Resource.Loading)
+    
+    val showState: StateFlow<Resource<List<ShowDto>>> = _showState.asStateFlow()
+    init{
+        loadShows()
     }
 
-    fun fetchShows(page: Int = 0) {
-        viewModelScope.launch {
-            _uiState.value = Resource.Loading
-            try {
-                val shows = repository.getShows(page)
-                _uiState.value = Resource.Success(shows)
-            } catch (e: Exception) {
-                _uiState.value = Resource.Error(
-                    e.message ?: "Failed to load shows. Please try again."
-                )
+    fun loadShows(page: Int = 0){
+        viewModelScope.launch{
+            _showState.value = Resource.Loading
+            try{
+                val result = repository.getShows(page)
+            } catch(e: Exception){
+                _showState.value = Resource.Error(e.message ?: "Unknown Error")
             }
         }
     }
 }
+
+    
