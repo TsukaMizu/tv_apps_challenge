@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
@@ -25,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -46,6 +50,7 @@ fun ShowDetailScreen(
     )
 ) {
     val state by viewModel.detailState.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         modifier = modifier,
@@ -55,6 +60,14 @@ fun ShowDetailScreen(
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    val current = state
+                    if (current is Resource.Success) {
+                        IconButton(onClick = { shareShow(context, current.data) }) {
+                            Icon(Icons.Default.Share, contentDescription = "Share")
+                        }
                     }
                 }
             )
@@ -130,6 +143,15 @@ private fun ShowDetailContent(
             }
         }
     }
+}
+
+private fun shareShow(context: Context, detail: ShowDetailUi) {
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_SUBJECT, detail.title)
+        putExtra(Intent.EXTRA_TEXT, detail.toShareText())
+    }
+    context.startActivity(Intent.createChooser(shareIntent, "Share ${detail.title}"))
 }
 
 @Composable

@@ -11,7 +11,8 @@ data class ShowDetailUi(
     val summary: String,
     val premiered: String?,
     val ratingText: String,
-    val cast: List<CastMemberUi>
+    val cast: List<CastMemberUi>,
+    val url: String?
 )
 
 data class CastMemberUi(
@@ -28,8 +29,21 @@ fun ShowDto.toDetailUi(cast: List<CastDto> = emptyList()): ShowDetailUi = ShowDe
     summary = summary.fromHtml(),
     premiered = premiered,
     ratingText = rating?.average?.let { "★ %.1f".format(it) } ?: "N/A",
-    cast = cast.mapNotNull { it.toCastMemberUi() }
+    cast = cast.mapNotNull { it.toCastMemberUi() },
+    url = url
 )
+
+fun ShowDetailUi.toShareText(): String = buildString {
+    appendLine(title)
+    if (summary.isNotBlank()) {
+        appendLine()
+        appendLine(summary)
+    }
+    if (!url.isNullOrBlank()) {
+        appendLine()
+        append(url)
+    }
+}
 
 private fun CastDto.toCastMemberUi(): CastMemberUi? {
     val person = person ?: return null
