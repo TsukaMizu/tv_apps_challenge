@@ -1,4 +1,4 @@
-package com.example.tvapps.data.remote
+package com.exam1.tvapps.data.remote
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
