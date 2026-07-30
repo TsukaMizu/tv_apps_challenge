@@ -100,3 +100,29 @@ Beberapa contoh kesalahan yang ditemukan:
 - Penulisan tipe data Kotlin:
 ```kotlin
 int
+```
+- seharusnya:
+```kotlin
+Int
+```
+- Import package yang salah:
+```kotlin
+import com.example.tvapps.util.Resource
+```
+- seharusnya:
+```kotlin
+import com.example.tvapps.utils.Resource
+```
+AI juga menunjukkan lokasi file dan baris kode yang mengalami masalah sehingga proses debugging menjadi lebih mudah.
+
+### 3. Apa yang saya lakukan
+Saya tidak langsung menerima seluruh hasil analisis AI. Saya mencocokkan setiap rekomendasi yang diberikan dengan pesan error yang muncul dari compiler.
+
+Setelah memastikan bahwa error berasal dari typo dan kesalahan import, saya memperbaiki kode tersebut dan menjalankan kembali proses build.
+
+Setelah seluruh perbaikan dilakukan, aplikasi berhasil melakukan proses build dan dapat dijalankan kembali.
+
+### 4. Satu hal yang AI lakukan kurang tepat atau yang saya verifikasi sendiri
+AI membantu menemukan beberapa kesalahan penulisan kode, tetapi tidak dapat memastikan bahwa seluruh error yang muncul berasal dari typo.
+
+Saya tetap melakukan verifikasi melalui pesan error compiler untuk memastikan bahwa penyebab utama kegagalan build memang berasal dari kesalahan penulisan dan import package, bukan karena masalah arsitektur aplikasi atau konfigurasi proyek.
