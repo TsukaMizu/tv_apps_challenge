@@ -7,7 +7,7 @@ import com.example.tvapps.data.repository.TvRepositoryImpl
 
 /**
  * Application class used as a simple manual DI container.
- * Exposes a single, app-wide [TvRepository] instance so screens/ViewModels
+ * Exposes a single, app-wide TvRepository instance so screens/ViewModels
  * don't need to construct their own Retrofit/OkHttp stack.
  */
 class TvApp : Application() {

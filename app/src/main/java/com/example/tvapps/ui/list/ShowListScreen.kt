@@ -26,9 +26,7 @@ fun ShowListScreen(
     modifier: Modifier = Modifier,
     viewModel: ShowListViewModel = viewModel(factory = ShowListViewModel.factory(repository))
 ) {
-    val state by viewModel.showState.collectAsState(
-    initial = Resource.Loading
-)
+    val state by viewModel.showState.collectAsState()
 
     Scaffold(
         modifier = modifier,

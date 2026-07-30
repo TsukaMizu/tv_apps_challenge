@@ -22,40 +22,17 @@ class ShowListViewModel(
         loadShows()
     }
 
-fun loadShows(page: Int = 0) {
-
-    viewModelScope.launch {
-
-        Log.d("SHOW_VM", "loadShows dipanggil")
-
-        _showState.value = Resource.Loading
-
-        try {
-
-            val result = repository.getShows(page)
-
-            Log.d(
-                "SHOW_VM",
-                "Jumlah data: ${result.size}"
-            )
-
-            _showState.value = Resource.Success(result)
-
-        } catch (e: Exception) {
-
-            Log.e(
-                "SHOW_VM",
-                "ERROR API: ${e.message}",
-                e
-            )
-
-            _showState.value =
-                Resource.Error(
-                    e.message ?: "Unknown Error"
-                )
+    fun loadShows(page: Int = 0) {
+        viewModelScope.launch {
+            _showState.value = Resource.Loading
+            try {
+                val result = repository.getShows(page)
+                _showState.value = Resource.Success(result)
+            } catch (e: Exception) {
+                _showState.value = Resource.Error(e.message ?: "Unknown Error")
+            }
         }
     }
-}
 
     companion object {
         fun factory(repository: TvRepository): ViewModelProvider.Factory =
